@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOP_Remedial | Physics Test</title>
+
+<style>
+:root {
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #68738a;
+  --border: #dce2ee;
+  --accent: #4f65e8;
+  --good: #168653;
+  --bad: #d73549;
+}
+
+body.dark {
+  --bg: #101522;
+  --card: #1b2333;
+  --text: #f1f4fc;
+  --muted: #a6b0c5;
+  --border: #344056;
+  --accent: #8998ff;
+  --good: #55dda0;
+  --bad: #ff7d8b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  transition: background .2s, color .2s;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+header h2 { margin: 0; font-size: 20px; }
+header small { color: var(--muted); }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--accent);
+  color: white;
+  font-weight: bold;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 11px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#themeBtn {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+main {
+  max-width: 680px;
+  margin: 35px auto;
+  padding: 0 16px;
+}
+
+.welcome {
+  text-align: center;
+  padding: 42px 25px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 20px;
+}
+
+.welcome-icon {
+  font-size: 44px;
+  margin-bottom: 15px;
+}
+
+.welcome h1 {
+  font-size: clamp(29px, 6vw, 42px);
+  margin: 10px 0;
+}
+
+.welcome h1 span { color: var(--accent); }
+
+.welcome p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.motivation {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 17px;
+  border-radius: 12px;
+  margin: 23px 0;
+  line-height: 1.7;
+}
+
+.motivation strong { color: var(--accent); }
+
+.start-btn {
+  width: 100%;
+  max-width: 300px;
+  padding: 15px 22px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform .2s, opacity .2s;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  opacity: .92;
+}
+
+.welcome-note {
+  font-size: 12px !important;
+  margin-top: 17px;
+}
+
+#testArea, #result { display: none; }
+
+.test-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.progress {
+  height: 5px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .2s;
+}
+
+.test-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.subject {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+#question {
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 16px 0 22px;
+}
+
+#options {
+  display: grid;
+  gap: 12px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  text-align: left;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  cursor: pointer;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  background: var(--border);
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.option.correct { border-color: var(--good); }
+.option.correct .letter { background: var(--good); color: white; }
+.option.wrong { border-color: var(--bad); }
+.option.wrong .letter { background: var(--bad); color: white; }
+
+#feedback {
+  display: none;
+  padding: 14px;
+  margin-top: 18px;
+  border-radius: 10px;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+#feedback.show { display: block; }
+#feedback.good { border: 1px solid var(--good); }
+#feedback.bad { border: 1px solid var(--bad); }
+#feedback strong { display: block; margin-bottom: 5px; }
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.action-btn {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#prevBtn {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+#nextBtn, #restartBtn {
+  background: var(--accent);
+  color: white;
+}
+
+.action-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+#result {
+  text-align: center;
+}
+
+#result h2 { font-size: 28px; }
+#finalScore {
+  font-size: 42px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+#result p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 20px;
+  font-size: 12px;
+}
+
+@media(max-width: 480px) {
+  main { margin-top: 22px; }
+  .welcome { padding: 32px 19px; }
+  .test-card { padding: 18px; }
+  #question { font-size: 19px; }
+  #themeBtn { font-size: 12px; padding: 0 8px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">H</div>
+    <div>
+      <h2>HOP_Remedial</h2>
+      <small>Physics Practice Test</small>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <!-- Replace YOUR_TELEGRAM_USERNAME with the real username -->
+    <a class="icon-btn"
+       href="https://t.me/YOUR_TELEGRAM_USERNAME"
+       target="_blank"
+       rel="noopener"
+       aria-label="Telegram"
+       title="Join us on Telegram">
+      <svg viewBox="0 0 24 24" width="23" height="23"
+           fill="currentColor" aria-hidden="true">
+        <path d="M21.8 3.3 18.5 20c-.25 1.18-.9 1.47-1.82.92l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.14 9.36-8.46c.41-.36-.09-.56-.64-.2L5.68 13.5.7 11.94c-1.08-.34-1.1-1.08.23-1.6L20.4 2.8c.9-.33 1.69.22 1.4.5Z"/>
+      </svg>
+    </a>
+
+    <button id="themeBtn" class="icon-btn" type="button">
+      🌙 Dark
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- WELCOME SCREEN -->
+  <section class="welcome" id="welcome">
+    <div class="welcome-icon">🚀</div>
+
+    <div class="subject">WELCOME TO HOP_REMEDIAL</div>
+
+    <h1>Believe in yourself.<br><span>Start your journey.</span></h1>
+
+    <p>
+      Success begins when you decide to try.
+      Every question you answer helps you grow.
+      Stay focused, learn from mistakes, and never give up.
+    </p>
+
+    <div class="motivation">
+      <strong>Your future is built one step at a time.</strong><br>
+      You do not need to know everything today.
+      You only need the courage to start and the discipline to continue.
+    </div>
+
+    <button class="start-btn" id="startBtn">
+      Start Test →
+    </button>
+
+    <p class="welcome-note">
+      PHYSICS · 10 QUESTIONS · INSTANT FEEDBACK
+    </p>
+  </section>
+
+  <!-- HIDDEN TEST: appears after Start Test is clicked -->
+  <section id="testArea">
+    <div class="test-info">
+      <span id="counter">Question 1 of 10</span>
+      <span id="score">Score: 0</span>
+    </div>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <section class="test-card">
+      <div class="subject">PHYSICS</div>
+
+      <h3 id="question"></h3>
+
+      <div id="options"></div>
+
+      <div id="feedback" aria-live="polite"></div>
+
+      <div class="actions">
+        <button class="action-btn" id="prevBtn">
+          ← Previous
+        </button>
+
+        <button class="action-btn" id="nextBtn" disabled>
+          Next →
+        </button>
+      </div>
+    </section>
+  </section>
+
+  <!-- RESULT SCREEN -->
+  <section class="test-card" id="result">
+    <div class="subject">TEST COMPLETED</div>
+    <h2 id="resultTitle">Your Result</h2>
+    <div id="finalScore">0 / 100</div>
+    <p id="resultMessage"></p>
+    <p id="resultDetails"></p>
+    <button class="action-btn" id="restartBtn">Try Again ↻</button>
+  </section>
+
+</main>
+
+<footer>HOP_Remedial · Learn and improve every day.</footer>
+
+<script>
+const questions = [
+  {
+    q: "What is the SI unit of force?",
+    options: ["Joule", "Newton", "Watt", "Pascal"],
+    answer: 1,
+    why: "Force is measured in newtons (N)."
+  },
+  {
+    q: "A car travels 120 m in 6 seconds. What is its speed?",
+    options: ["12 m/s", "15 m/s", "20 m/s", "24 m/s"],
+    answer: 2,
+    why: "Speed = distance ÷ time = 120 ÷ 6 = 20 m/s."
+  },
+  {
+    q: "Velocity changes from 4 m/s to 16 m/s in 3 seconds. Find acceleration.",
+    options: ["3 m/s²", "4 m/s²", "6 m/s²", "12 m/s²"],
+    answer: 1,
+    why: "Acceleration = (16 − 4) ÷ 3 = 4 m/s²."
+  },
+  {
+    q: "An object remains at rest unless a net external force acts on it. Which law is this?",
+    options: [
+      "Newton's first law",
+      "Newton's second law",
+      "Newton's third law",
+      "Law of gravitation"
+    ],
+    answer: 0,
+    why: "Newton's first law describes inertia."
+  },
+  {
+    q: "A 10 N force moves an object 5 m in the force's direction. Find the work done.",
+    options: ["2 J", "15 J", "50 J", "100 J"],
+    answer: 2,
+    why: "Work = force × displacement = 10 × 5 = 50 J."
+  },
+  {
+    q: "A machine does 600 J of work in 10 seconds. Find its power.",
+    options: ["6 W", "60 W", "100 W", "6000 W"],
+    answer: 1,
+    why: "Power = work ÷ time = 600 ÷ 10 = 60 W."
+  },
+  {
+    q: "An object has a mass of 200 g and a volume of 50 cm³. Find its density.",
+    options: ["0.25 g/cm³", "2 g/cm³", "4 g/cm³", "10 g/cm³"],
+    answer: 2,
+    why: "Density = mass ÷ volume = 200 ÷ 50 = 4 g/cm³."
+  },
+  {
+    q: "A wave has a frequency of 5 Hz and wavelength of 2 m. Find its speed.",
+    options: ["2.5 m/s", "7 m/s", "10 m/s", "20 m/s"],
+    answer: 2,
+    why: "Wave speed = frequency × wavelength = 5 × 2 = 10 m/s."
+  },
+  {
+    q: "A 12 V battery is connected to a 4 Ω resistor. Find the current.",
+    options: ["0.33 A", "3 A", "8 A", "48 A"],
+    answer: 1,
+    why: "Ohm's law: I = V ÷ R = 12 ÷ 4 = 3 A."
+  },
+  {
+    q: "A force of 100 N acts on an area of 2 m². Find the pressure.",
+    options: ["25 Pa", "50 Pa", "100 Pa", "200 Pa"],
+    answer: 1,
+    why: "Pressure = force ÷ area = 100 ÷ 2 = 50 Pa."
+  }
+];
+
+let current = 0;
+let answers = Array(questions.length).fill(null);
+
+const $ = id => document.getElementById(id);
+
+$("startBtn").addEventListener("click", () => {
+  $("welcome").style.display = "none";
+  $("result").style.display = "none";
+  $("testArea").style.display = "block";
+  current = 0;
+  render();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function render() {
+  const item = questions[current];
+
+  $("counter").textContent =
+    `Question ${current + 1} of ${questions.length}`;
+
+  $("progressBar").style.width =
+    `${((current + 1) / questions.length) * 100}%`;
+
+  $("question").textContent = item.q;
+  $("options").innerHTML = "";
+
+  item.options.forEach((option, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.type = "button";
+
+    if (answers[current] !== null) {
+      btn.disabled = true;
+
+      if (i === item.answer) {
+        btn.classList.add("correct");
+      } else if (i === answers[current]) {
+        btn.classList.add("wrong");
+      }
+    }
+
+    const letter = document.createElement("span");
+    letter.className = "letter";
+    letter.textContent = "ABCD"[i];
+
+    const text = document.createElement("span");
+    text.textContent = option;
+
+    btn.append(letter, text);
+    btn.onclick = () => choose(i);
+
+    $("options").appendChild(btn);
+  });
+
+  const feedback = $("feedback");
+  feedback.className = "feedback";
+  feedback.innerHTML = "";
+
+  if (answers[current] !== null) {
+    const correct = answers[current] === item.answer;
+
+    feedback.classList.add("show", correct ? "good" : "bad");
+
+    const heading = document.createElement("strong");
+
+    heading.textContent = correct
+      ? "✓ Correct answer!"
+      : "✗ Incorrect. Correct answer: " + item.options[item.answer];
+
+    feedback.append(heading, document.createTextNode(item.why));
+  }
+
+  const points = answers.reduce(
+    (sum, a, i) => sum + (a === questions[i].answer ? 10 : 0),
+    0
+  );
+
+  $("score").textContent = `Score: ${points}`;
+  $("prevBtn").disabled = current === 0;
+  $("nextBtn").disabled = answers[current] === null;
+
+  $("nextBtn").textContent =
+    current === questions.length - 1 ? "Finish ✓" : "Next →";
+}
+
+function choose(index) {
+  if (answers[current] !== null) return;
+
+  answers[current] = index;
+  render();
+}
+
+$("prevBtn").onclick = () => {
+  if (current > 0) {
+    current--;
+    render();
+  }
+};
+
+$("nextBtn").onclick = () => {
+  if (answers[current] === null) return;
+
+  if (current < questions.length - 1) {
+    current++;
+    render();
+  } else {
+    showResult();
+  }
+};
+
+function showResult() {
+  $("testArea").style.display = "none";
+  $("result").style.display = "block";
+
+  const correct = answers.filter(
+    (a, i) => a === questions[i].answer
+  ).length;
+
+  const points = correct * 10;
+
+  $("finalScore").textContent = `${points} / 100`;
+
+  $("resultTitle").textContent =
+    points >= 80 ? "Excellent work!" :
+    points >= 50 ? "Good effort!" :
+    "Keep practicing!";
+
+  $("resultMessage").textContent =
+    points >= 80
+      ? "Excellent! Keep building your knowledge."
+      : points >= 50
+      ? "Good progress. Review the explanations and improve."
+      : "Do not give up. Learn from each mistake and try again.";
+
+  $("resultDetails").textContent =
+    `Correct: ${correct} · Incorrect: ${questions.length - correct}`;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("restartBtn").onclick = () => {
+  current = 0;
+  answers = Array(questions.length).fill(null);
+
+  $("result").style.display = "none";
+  $("welcome").style.display = "block";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+$("themeBtn").onclick = () => {
+  document.body.classList.toggle("dark");
+
+  const dark = document.body.classList.contains("dark");
+
+  $("themeBtn").textContent = dark ? "☀️ Light" : "🌙 Dark";
+};
+
+render();
+</script>
+
+</body>
+</html>
